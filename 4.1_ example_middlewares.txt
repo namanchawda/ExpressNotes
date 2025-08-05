@@ -1,0 +1,114 @@
+const express = require('express');
+const app = express();
+
+function logger(req, res, next) {
+  console.log("Logger ran");
+  next();
+}
+
+function authChecker(req, res, next) {
+  console.log("Auth check ran");
+  next();
+}
+
+app.use(logger);
+app.use(authChecker);
+
+app.get('/', (req, res) => {
+  res.send("Home Page");
+});
+
+app.listen(3000);
+-------------------------------------------------------------
+
+const express = require('express');
+const app = express();
+
+function checkAdmin(req, res, next) {
+  console.log("Admin middleware ran");
+  next();
+}
+
+app.use('/admin', checkAdmin);
+
+app.get('/admin/dashboard', (req, res) => {
+  res.send("Admin Dashboard");
+});
+
+app.get('/user/profile', (req, res) => {
+  res.send("User Profile");
+});
+
+app.listen(3000);
+----------------------------------------------------------------
+const express = require('express');
+const app = express();
+
+function stopHere(req, res, next) {
+  res.send("Stopped here, no next()");
+  // no next() → request ends here
+}
+
+function willNotRun(req, res, next) {
+  console.log("This won't run");
+  next();
+}
+
+app.use(stopHere);
+app.use(willNotRun);
+
+app.get('/', (req, res) => {
+  res.send("Hello from /");
+});
+
+app.listen(3000);
+---------------------------------------------------------------
+const express = require('express');
+const app = express();
+
+function gatekeeper(req, res, next) {
+  const isAdmin = false; // simulate user role
+  if (isAdmin) {
+    next(); // let it pass
+  } else {
+    res.status(403).send("Forbidden: Not an Admin");
+  }
+}
+
+app.use('/admin', gatekeeper);
+
+app.get('/admin/panel', (req, res) => {
+  res.send("Welcome Admin");
+});
+
+app.listen(3000);
+----------------------------------------------------------------
+const express = require('express');
+const app = express();
+
+function middlewareA(req, res, next) {
+  console.log("A");
+  next();
+}
+
+function middlewareB(req, res, next) {
+  console.log("B");
+  next();
+}
+
+function middlewareC(req, res, next) {
+  console.log("C");
+  next();
+}
+
+app.use(middlewareA);
+app.use(middlewareB);
+app.get('/', middlewareC, (req, res) => {
+  console.log("Handler");
+  res.send("Done");
+});
+
+app.listen(3000);
+-----------------------------------------------------------------
+
+

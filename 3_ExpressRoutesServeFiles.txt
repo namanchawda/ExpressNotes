@@ -1,0 +1,76 @@
+const express = require("express");
+
+http verbs - get, post, put, delete, all
+
+app.use(...) // takes one arg for middleware
+
+---------------------------------------------------------------
+const app = express();
+
+app.all("*", (req, res) => {
+  res.send("<h1>hello from express</h1>");
+});
+
+app.listen(3000, () => {
+  console.log("Server running at http://localhost:3000")
+});
+--------------------------------------------------------------
+const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("<h1>hello from GET express</h1>");
+});
+
+app.post("/", (req, res) => {
+  res.send("<h1>hello from POST express</h1>");
+});
+
+app.listen(3000, () => {
+  console.log("Server running at http://localhost:3000")
+});
+---------------------------------------------------------------
+
+Important!
+// *Serving Static Files in Express!*
+// every file in public is now accessable with the http url
+
+---------------------File Structure
+/WhatIsExpress
+├── backend/
+│   └── server.js
+├── node_modules/
+├── public/
+│   ├── home.html
+│   └── style.css
+├── package.json
+└── package-lock.json
+----------------------
+
+const express = require("express");
+const path = require("path");
+
+const app = express();
+
+app.use(express.static("public")); // contains home.html and style.css
+
+app.get("/", (req, res) => {
+  res.send("<h1>hello from GET!</h1>")
+});
+
+app.post("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "home.html"));
+  // res.send("<h1>hello from GET!</h1>")
+});
+
+app.all("*", (req, res) => {
+  res.send("<h1>This is when no route got hit!</h1>")
+})
+
+app.listen(3000, () => {
+  console.log("Server running at http://localhost:3000")
+});
+--------------------------------------------------------------
+
+

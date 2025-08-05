@@ -1,0 +1,113 @@
+// kya ho rha h is code m ???
+// what i was doing earlier was sending data from the the 
+// frontend to the backend and that is being done using 
+// the express.json or express.urlencoded thing
+
+// note - the "body" object is created only when we send the body data
+// there is no body object in req object
+// "body" object is just a name for the object that we asked to make
+// it is created by the express.json or express.urlencoded middlewares
+
+// yaha jo kr rhe h wo axios se bhi ho skta h 
+
+// myApp.js file
+
+const express = require('express');
+const app = express();
+const helmet = require("helmet")
+
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          'https://ajax.googleapis.com'  // ✅ allow jQuery CDN
+        ],
+      },
+    },
+  })
+);
+app.use(express.static("public"));
+app.use(express.json());
+
+// what does extended : false do?
+// => Only parses simple, flat key-value pairs.
+// => Does NOT support rich/nested objects.
+app.use(express.urlencoded({extended : false}));
+
+
+app.post("/ajax", (req, res) => {
+  console.log(req.body);
+  // res.send("Test");
+  res.json("Test") // using this as it handles the content-type
+})
+
+app.listen(3000, () => {
+  console.log("server running at http://localhost:3000");
+})
+-----------------------------------------------------------------
+
+// ajax.html file in public directory
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/script.js" defer></script>
+-----------------------------------------------------------------
+
+// scripts.js file in public directory
+
+const ourRequest = $.ajax({
+  method: "POST",
+  url: "http://localhost:3000/ajax",
+  dataType: "json",
+  data: {
+    name: "Naman Chawda",
+    roll: 39
+  },
+});
+ourRequest.then((response, statusCode, xmlhtpo) => {
+  console.log(response);
+  console.log(statusCode);
+  console.log(xmlhtpo);
+});
+------------------------------------------------------------------
+------------------------------------------------------------------
+
+This is a simple example of how we can get the data from the frontend
+via a form, we fill it and submit, the data is parsed through
+app.use(express.urlencoded(extended: false));
+and loaded in the req object
+-------------------------------------HTML
+
+<form action="/submit-form" method="POST">
+  <input type="text" name="username" placeholder="Enter username" required />
+  <input type="email" name="email" placeholder="Enter email" required />
+  <button type="submit">Submit</button>
+</form>
+
+-------------------------------------JS
+
+const express = require('express');
+const app = express();
+
+app.use(express.urlencoded({ extended: false }));  // to parse form data
+
+app.post('/submit-form', (req, res) => {
+  console.log(req.body); // { username: '...', email: '...' }
+  res.send('Form data received');
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+
+---------------------------------------------------------------------
+
+
+
+
+
+
+
+
+

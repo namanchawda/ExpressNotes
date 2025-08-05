@@ -1,0 +1,107 @@
+forEach
+map
+filter
+find
+indexOf
+object
+freeze
+
+length-can find length of a function as well
+
+var blob = await fetch('https://randomuser.me/api/');
+var res = await blob.json();
+console.log(res);
+
+async await promises
+
+*JS is synchronious!
+synchronous means one by one
+*async means saare kaam ek sath shuru kardo, 
+ jiska answer pehle aa jaye uska jawab pehle de dena
+
+when to use async :
+setTimeout
+setInterval
+promises
+fetch
+axios
+XMLHttpRequest
+
+jab hamara code is dependent on dusre k server and hme nhi pta
+ki result kb aayega tb we should use asynchronous code
+
+setTimeout(callback()=>{
+	console.log("hello after 5 seconds");
+}, 5000);
+
+event side stack se main stack m async code le kr aata h
+
+--------------------------
+CODE
+--------------------------
+console.log("hey);
+console.log("hey 2);
+setTimeout(function() {
+    console.log("hey 3);	
+}, 0);
+console.log("hey 4);
+--------------------------
+OUTPUT
+--------------------------
+hey
+hey2
+hey4
+hey3
+--------------------------
+
+
+Promises : example
+
+let x = new Promise((res, rej) => {
+    if (true) {
+        return res("hello from resolve");
+    } else {
+        return rej("hello from reject");
+    }
+});
+x.then((event) => { console.log(event) } ).catch(() => { console.log("reject hua tha") });
+
+--------------------------------------------------------------------------
+how can you make use of Promises in an asynchronous way : Promises Chaining
+promises { promises { promises ...} } }
+--------------------------------------------------------------------------
+
+async await concept : jab raw aayega tabhi ans chalegi!
+
+async function abc() {
+    let raw = await fetch("https://randomuser.me/api/");
+    let ans = await raw.json();
+    console.log(ans);
+}
+abc();
+
+---------------------------------------------------------------------------
+
+agar .then() se use krne se bachna h to await use kro :
+
+function abc() {
+    fetch("https://randomuser.me/api/")
+        .then((raw) => raw.json())
+        .then((ans) => {
+            console.log(ans);
+        })
+        .catch((err) => {
+            console.error("Error occurred:", err);
+        });
+}
+abc();
+
+---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
